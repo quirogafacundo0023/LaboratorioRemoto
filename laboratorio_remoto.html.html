@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Laboratorio Remoto - Tec. Uni. en Mecatrónica - UTN-FRT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #0b1f33 0%, #123b5d 50%, #0b263d 100%);
+      color: #eef7ff;
+      margin: 0;
+      padding: 0 10px 40px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      justify-content: space-between;
+    }
+    h1 {
+      margin-top: 30px;
+      margin-bottom: 8px;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #42c8ff;
+      text-shadow: 0 0 14px rgba(66, 200, 255, 0.25);
+    }
+
+    .subtitle {
+      margin: 0 0 25px;
+      color: #b8cfe0;
+      font-size: 1rem;
+    }
+    .relay-card {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.97);
+      color: #17324d;
+      padding: 20px;
+      margin: 15px;
+      border-radius: 15px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(66, 200, 255, 0.18);
+      width: 220px;
+      vertical-align: top;
+    }
+    .relay-card h2 {
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+    .relay-card p {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+    .relay-card button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      background: linear-gradient(135deg, #168dcc, #1266a3);
+      cursor: pointer;
+      font-size: 16px;
+	  width: 90%;
+      transition: opacity 0.3s ease;
+    }
+    .relay-card button:hover {
+      opacity: 0.8;
+    }
+    #allOffBtn, #logoutBtn {
+      max-width: 300px;
+      width: 90%;
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 15px auto;
+      display: block;
+      color: white;
+      transition: opacity 0.3s ease;
+    }
+    #allOffBtn {
+      background: linear-gradient(135deg, #e04b4b, #b92d3a);
+    }
+    #allOffBtn:hover {
+      opacity: 0.8;
+    }
+    #logoutBtn {
+      background: linear-gradient(135deg, #526577, #364554);
+    }
+    #logoutBtn:hover {
+      opacity: 0.8;
+    }
+
+    /* Responsive layout */
+    #dashboard {
+      display: none;
+    }
+    #loginForm {
+      max-width: 400px;
+      margin: 80px auto 20px;
+      background: rgba(255, 255, 255, 0.98);
+      color: #17324d;
+      padding: 30px 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    #loginForm input {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0 20px;
+      font-size: 1rem;
+      border: 1.5px solid #ccc;
+      border-radius: 10px;
+      box-sizing: border-box;
+      outline-offset: 2px;
+      transition: border-color 0.3s ease;
+    }
+    #loginForm input:focus {
+      border-color: #168dcc;
+    }
+    #loginForm button {
+      width: 100%;
+      background: linear-gradient(135deg, #168dcc, #1266a3);
+      color: white;
+      padding: 12px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #loginForm button:hover {
+      background: linear-gradient(135deg, #1266a3, #0d4e7d);
+    }
+    #dashboard .relay-container {
+      max-width: 960px;
+      margin: 20px auto 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    /* Smaller devices */
+    @media (max-width: 700px) {
+      .relay-card {
+        width: 90%;
+        margin: 10px auto;
+        display: block;
+      }
+      body {
+        padding: 0 10px 60px;
+      }
+    }
+    footer {
+      font-size: 0.9rem;
+      color: #a9bfd0;
+      padding: 10px 0;
+      margin-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>LABORATORIO REMOTO</h1>
+  <p class="subtitle">Tec. Uni. en Mecatrónica - UTN-FRT</p>
+
+  <!-- Login form -->
+  <div id="loginForm">
+    <input type="email" id="email" placeholder="Correo electrónico" required />
+    <input type="password" id="password" placeholder="Contraseña" required />
+    <button id="loginBtn">Ingresar</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard">
+    <div class="relay-container">
+      <div class="relay-card">
+        <h2>Relé 1</h2>
+        <p>Estado: <span id="status1">Loading...</span></p>
+        <button id="btn1">Activar / Desactivar</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>Relé 2</h2>
+        <p>Estado: <span id="status2">Loading...</span></p>
+        <button id="btn2">Activar / Desactivar</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>Relé 3</h2>
+        <p>Estado: <span id="status3">Loading...</span></p>
+        <button id="btn3">Activar / Desactivar</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>Relé 4</h2>
+        <p>Estado: <span id="status4">Loading...</span></p>
+        <button id="btn4">Activar / Desactivar</button>
+      </div>
+    </div>
+
+    <button id="allOffBtn">APAGAR TODO</button>
+    <button id="logoutBtn">Cerrar sesión</button>
+  </div>
+
+  <footer>
+    Profesores Poli / Facundo
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+  apiKey: "AIzaSyDsiq-bBF10vHnGukKcfU7wACANc9jfhHs",
+  authDomain: "laboratorio-remoto-mecatronica.firebaseapp.com",
+  databaseURL: "https://laboratorio-remoto-mecatronica-default-rtdb.firebaseio.com",
+  projectId: "laboratorio-remoto-mecatronica",
+  storageBucket: "laboratorio-remoto-mecatronica.firebasestorage.app",
+  messagingSenderId: "1095083200553",
+  appId: "1:1095083200553:web:18813fd76a2adcbba24c38"
+};
+
+    firebase.initializeApp(firebaseConfig);
+
+    // Predefined login credentials (can be replaced with your logic)
+    const allowedEmail = "tec.univ.meca-lab@gmail.com";
+    const allowedPassword = "LabDonPoli";
+
+    const loginForm = document.getElementById("loginForm");
+    const dashboard = document.getElementById("dashboard");
+    const loginBtn = document.getElementById("loginBtn");
+
+    loginBtn.addEventListener("click", () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!email || !password) {
+        alert("Please enter email and password.");
+        return;
+      }
+
+      // Check hardcoded credentials first
+      if(email === allowedEmail && password === allowedPassword){
+        // Sign in with Firebase
+        firebase.auth().signInWithEmailAndPassword(email, password)
+          .then(userCredential => {
+            console.log("Signed in as", userCredential.user.email);
+            loginForm.style.display = "none";
+            dashboard.style.display = "block";
+            startRelayControl();
+          })
+          .catch(error => {
+            alert("Firebase login failed: " + error.message);
+          });
+      } else {
+        alert("Invalid email or password.");
+      }
+    });
+
+    function startRelayControl() {
+      const db = firebase.database();
+
+      const relays = [
+        { id: 1, path: "relay1" },
+        { id: 2, path: "relay2" },
+        { id: 3, path: "relay3" },
+        { id: 4, path: "relay4" },
+      ];
+
+      relays.forEach(relay => {
+        const statusText = document.getElementById(`status${relay.id}`);
+        const toggleButton = document.getElementById(`btn${relay.id}`);
+        const relayRef = db.ref("/" + relay.path);
+
+        relayRef.on("value", (snapshot) => {
+          const state = snapshot.val();
+          statusText.innerText = state ? "ON" : "OFF";
+          toggleButton.style.backgroundColor = state ? "green" : "blue";
+        });
+
+        toggleButton.onclick = () => {
+          relayRef.get().then(snap => {
+            relayRef.set(!snap.val());
+          });
+        };
+      });
+
+      document.getElementById("allOffBtn").onclick = () => {
+        relays.forEach(relay => {
+          db.ref("/" + relay.path).set(false);
+        });
+      };
+    }
+
+    document.getElementById("logoutBtn").onclick = () => {
+      firebase.auth().signOut()
+        .then(() => {
+          dashboard.style.display = "none";
+          loginForm.style.display = "block";
+          document.getElementById("email").value = "";
+          document.getElementById("password").value = "";
+        })
+        .catch(error => {
+          alert("Logout failed: " + error.message);
+        });
+    };
+  </script>
+</body>
+</html>
